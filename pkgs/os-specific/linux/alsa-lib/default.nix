@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{stdenv, fetchurl, pluginHack ? false}:
 
 stdenv.mkDerivation rec {
   name = "alsa-lib-1.0.29";
@@ -11,9 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1l5xzhq7xjy8xap087zbbyi14gr1bhil18pn987vwdlnxcskq13k";
   };
 
-  patches = [
-    ./alsa-plugin-conf-multilib.patch
-  ];
+  patches = if pluginHack then [./alsa-plugin-conf-multilib.patch] else [./alsa-plugin-conf-multilib-hacked.patch];
 
   # Fix pcm.h file in order to prevent some compilation bugs
   # 2: see http://stackoverflow.com/questions/3103400/how-to-overcome-u-int8-t-vs-uint8-t-issue-efficiently
